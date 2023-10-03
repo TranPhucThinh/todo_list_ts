@@ -56,20 +56,52 @@
   }
 
   .dropdown__content--pick-date {
+    border-bottom: 1px solid #e1dfdd;
+
+    .pick-date__logo-title {
+      padding: 8px 12px;
+      font-size: 14px;
+      color: #292827;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 8px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #ebebeb;
+      }
+
+      .logo-title__title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+    }
+  }
+
+  .dropdown__content--remove-due {
     padding: 8px 12px;
     font-size: 14px;
-    color: #292827;
     display: flex;
     gap: 12px;
+    color: #a80000;
     align-items: center;
     margin-bottom: 8px;
+    margin-top: 8px;
     cursor: pointer;
 
     &:hover {
       background-color: #ebebeb;
     }
 
-    .pick-date__title {
+    .remove-due__icon {
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+    }
+
+    .remove-due__title {
       display: flex;
       align-items: center;
       gap: 12px;

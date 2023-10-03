@@ -1,4 +1,5 @@
 import React from "react";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 import todayCalendar from "../../assets/images/today-calendar.svg";
 import tomorrowCalendar from "../../assets/images/tomorrow-calendar.svg";
@@ -9,14 +10,21 @@ import "./dropdownSetDue.scss";
 interface DropdownProps {
   showDropdownDue: boolean;
   setShowDropdownDue: React.Dispatch<React.SetStateAction<boolean>>;
+  setOptionDue: (_value: string) => void;
 }
 
 const DropdownSetDue: React.FC<DropdownProps> = ({
   showDropdownDue,
   setShowDropdownDue,
+  setOptionDue,
 }) => {
   const closeDropdownDueHandler = () => {
     setShowDropdownDue(!showDropdownDue);
+  };
+
+  const selectOptionDueHandler = (value: string) => {
+    setShowDropdownDue(!showDropdownDue);
+    setOptionDue(value);
   };
 
   return (
@@ -25,31 +33,51 @@ const DropdownSetDue: React.FC<DropdownProps> = ({
       <div className="dropdown__container">
         <div className="dropdown__header">Due</div>
         <div className="dropdown__content--options">
-          <div className="option">
+          <div
+            className="option"
+            onClick={() => selectOptionDueHandler("TODAY")}
+          >
             <div className="icon__title">
               <img src={todayCalendar} alt="today" />
-              <div className="option__title">Today</div>
+              <p className="option__title">Today</p>
             </div>
-            <div className="option__date">Mon</div>
+            <p className="option__date">Mon</p>
           </div>
-          <div className="option">
+          <div
+            className="option"
+            onClick={() => selectOptionDueHandler("TOMORROW")}
+          >
             <div className="icon__title">
               <img src={tomorrowCalendar} alt="Tomorrow" />
-              <div className="option__title">Tomorrow</div>
+              <p className="option__title">Tomorrow</p>
             </div>
-            <div className="option__date">Tue</div>
+            <p className="option__date">Tue</p>
           </div>
-          <div className="option">
+          <div
+            className="option"
+            onClick={() => selectOptionDueHandler("NEXT_WEEK")}
+          >
             <div className="icon__title">
               <img src={nextWeekCalendar} alt="Next week" />
-              <div className="option__title">Next week</div>
+              <p className="option__title">Next week</p>
             </div>
-            <div className="option__date">Mon</div>
+            <p className="option__date">Mon</p>
           </div>
         </div>
         <div className="dropdown__content--pick-date">
-          <img src={pickDateCalendar} alt="Pick a date" />
-          <div className="pick-date__title">Pick a date</div>
+          <div className="pick-date__logo-title">
+            <img src={pickDateCalendar} alt="Pick a date" />
+            <p className="logo-title__title">Pick a date</p>
+          </div>
+        </div>
+        <div
+          className="dropdown__content--remove-due"
+          onClick={() => selectOptionDueHandler("")}
+        >
+          <div className="remove-due__icon">
+            <RiDeleteBin6Line />
+          </div>
+          <p className="remove-due__title">Remove due date</p>
         </div>
       </div>
     </>

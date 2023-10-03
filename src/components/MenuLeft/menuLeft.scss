@@ -86,6 +86,11 @@
       &--options {
         margin-top: 16px;
 
+        .option__active {
+          background-color: #ebebeb;
+          font-weight: 600;
+        }
+
         .option {
           display: flex;
           align-items: center;

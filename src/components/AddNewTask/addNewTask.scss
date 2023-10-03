@@ -48,6 +48,10 @@
         font-size: 16px;
       }
     }
+
+    .disabled__btn {
+      cursor: not-allowed;
+    }
   }
 
   .set__due {
@@ -62,6 +66,22 @@
       color: #595858;
       font-size: 20px;
       display: inline-block;
+    }
+
+    &--select {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: white;
+      border: 1px solid #e1dfdd;
+      padding: 2px 8px;
+      border-radius: 6px;
+      justify-content: center;
+      cursor: default;
+    }
+
+    &--option {
+      font-size: 14px;
     }
   }
 }

@@ -6,6 +6,8 @@ import MyTasks from "./pages/myTasks";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import MenuLeft from "./components/MenuLeft";
+import Important from "./pages/important";
+import StickyWall from "./pages/stickyWall";
 
 const App: React.FC = () => {
   return (
@@ -21,7 +23,9 @@ const App: React.FC = () => {
             </>
           }
         >
-          <Route path="/" element={<MyTasks />}></Route>
+          <Route path="/my-tasks" element={<MyTasks />} />
+          <Route path="/important" element={<Important />} />
+          <Route path="/sticky-wall" element={<StickyWall />} />
         </Route>
       </Routes>
     </BrowserRouter>

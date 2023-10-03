@@ -4,15 +4,11 @@ import { Task } from "../../interface";
 import TaskItem from "../TaskItem";
 import "./taskList.scss";
 
-const tasksList: Task[] = [
-  {
-    title: "Research content ideas",
-    due_date: "22-03-22",
-    isImportant: false,
-  },
-];
+interface TaskListProps {
+  tasksList?: Task[];
+}
 
-const TaskList: React.FC = () => {
+const TaskList: React.FC<TaskListProps> = ({ tasksList }) => {
   return (
     <div className="task__list">
       {tasksList?.map((task, index) => {

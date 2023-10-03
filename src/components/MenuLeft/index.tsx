@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { HiMenu, HiOutlineSearch, HiOutlineStar } from "react-icons/hi";
 import { LuListTodo, LuSettings, LuLogOut } from "react-icons/lu";
 import { FaRegStickyNote } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 
 import "./menuLeft.scss";
 
@@ -36,28 +37,52 @@ const MenuLeft: React.FC = () => {
             <div className="menu__task">
               <p className="menu__task--title">TASKS</p>
               <div className="menu__task--options">
-                <div className="option my__tasks">
+                <NavLink
+                  to="/my-tasks"
+                  style={{ textDecoration: "none", color: "#7c7c7c" }}
+                  className={({ isActive }) =>
+                    isActive
+                      ? "option__active option my__tasks"
+                      : "option my__tasks"
+                  }
+                >
                   <div className="option__icon my__tasks--icon">
                     <LuListTodo />
                   </div>
                   <p className="option__title my__tasks--title">My tasks</p>
-                </div>
-                <div className="option important__tasks">
+                </NavLink>
+                <NavLink
+                  to="/important"
+                  style={{ textDecoration: "none", color: "#7c7c7c" }}
+                  className={({ isActive }) =>
+                    isActive
+                      ? "option__active option my__tasks"
+                      : "option important__tasks"
+                  }
+                >
                   <div className="option__icon important__tasks--icon">
                     <HiOutlineStar />
                   </div>
                   <p className="option__title important__tasks--title">
                     Important
                   </p>
-                </div>
-                <div className="option sticky__wall">
+                </NavLink>
+                <NavLink
+                  to="/sticky-wall"
+                  style={{ textDecoration: "none", color: "#7c7c7c" }}
+                  className={({ isActive }) =>
+                    isActive
+                      ? "option__active option my__tasks"
+                      : "option sticky__wall"
+                  }
+                >
                   <div className="option__icon sticky__wall--icon">
                     <FaRegStickyNote />
                   </div>
                   <p className="option__title sticky__wall--title">
                     Sticky Wall
                   </p>
-                </div>
+                </NavLink>
               </div>
             </div>
           </div>
