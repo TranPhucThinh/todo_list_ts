@@ -2,19 +2,21 @@ import React from "react";
 
 import { Task } from "../../interface";
 import TaskItem from "../TaskItem";
-import "./taskList.scss";
 
-interface TaskListProps {
+interface TasksCompletedProps {
   tasksList?: Task[];
   setDataTask: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
-const TaskList: React.FC<TaskListProps> = ({ tasksList, setDataTask }) => {
-  const taskInCompleted = tasksList?.filter((task) => !task?.isCompleted);
+const TasksCompleted: React.FC<TasksCompletedProps> = ({
+  tasksList,
+  setDataTask,
+}) => {
+  const tasksCompleted = tasksList?.filter((task) => task.isCompleted);
 
   return (
     <div className="task__list">
-      {taskInCompleted?.map((task, index) => {
+      {tasksCompleted?.map((task, index) => {
         return (
           <div key={index}>
             <TaskItem
@@ -29,4 +31,4 @@ const TaskList: React.FC<TaskListProps> = ({ tasksList, setDataTask }) => {
   );
 };
 
-export default TaskList;
+export default TasksCompleted;

@@ -1,0 +1,67 @@
+.task {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid rgb(235, 235, 235);
+  margin-top: 12px;
+  box-shadow:
+    0px 0.3px 0.9px rgba(0, 0, 0, 0.1),
+    0px 1.6px 3.6px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+  }
+
+  .task__checkbox-title,
+  .task__important-showDetails {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .task__checkbox-title {
+    .task__title {
+      color: #595858;
+    }
+
+    .task__completed {
+      text-decoration: line-through;
+    }
+
+    .task__due-date {
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      gap: 6px;
+      color: #595858;
+      margin-top: 2px;
+
+      &--icon {
+        &::before {
+          content: "\2022";
+          margin: 0 6px;
+          color: #595858;
+        }
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  .task__important-showDetails {
+    .task__important--icon,
+    .task__showDetails--icon {
+      display: flex;
+      align-items: center;
+      font-size: 20px;
+      color: #595858;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}

@@ -14,6 +14,7 @@
     "formik": "^2.4.5",
     "moment": "^2.29.4",
     "react": "^18.2.0",
+    "react-datepicker": "^4.18.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.16.0",
@@ -55,6 +56,7 @@
   "author": "thinhtp <thinhtp@greenglobal.vn>",
   "license": "MIT",
   "devDependencies": {
+    "@types/react-datepicker": "^4.15.1",
     "@types/uuid": "^9.0.4",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",

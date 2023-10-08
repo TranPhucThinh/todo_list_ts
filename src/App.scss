@@ -1,13 +1,4 @@
-.container__login {
+.app_wrapper {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background: rgb(216, 214, 255);
-  background: linear-gradient(
-    140deg,
-    rgba(216, 214, 255, 1) 0%,
-    rgba(214, 212, 252, 1) 59%,
-    rgba(214, 212, 252, 1) 100%
-  );
+  padding: 12px;
 }

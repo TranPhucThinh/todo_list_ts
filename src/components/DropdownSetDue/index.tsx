@@ -1,22 +1,24 @@
 import React from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
-import todayCalendar from "../../assets/images/today-calendar.svg";
-import tomorrowCalendar from "../../assets/images/tomorrow-calendar.svg";
 import nextWeekCalendar from "../../assets/images/nextweek-calendar.svg";
 import pickDateCalendar from "../../assets/images/pickDate-calendar.svg";
+import todayCalendar from "../../assets/images/today-calendar.svg";
+import tomorrowCalendar from "../../assets/images/tomorrow-calendar.svg";
 import "./dropdownSetDue.scss";
 
 interface DropdownProps {
   showDropdownDue: boolean;
   setShowDropdownDue: React.Dispatch<React.SetStateAction<boolean>>;
   setOptionDue: (_value: string) => void;
+  openDatePicker: () => void;
 }
 
 const DropdownSetDue: React.FC<DropdownProps> = ({
   showDropdownDue,
   setShowDropdownDue,
   setOptionDue,
+  openDatePicker,
 }) => {
   const closeDropdownDueHandler = () => {
     setShowDropdownDue(!showDropdownDue);
@@ -64,7 +66,7 @@ const DropdownSetDue: React.FC<DropdownProps> = ({
             <p className="option__date">Mon</p>
           </div>
         </div>
-        <div className="dropdown__content--pick-date">
+        <div className="dropdown__content--pick-date" onClick={openDatePicker}>
           <div className="pick-date__logo-title">
             <img src={pickDateCalendar} alt="Pick a date" />
             <p className="logo-title__title">Pick a date</p>
