@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { ChangeEvent, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -6,18 +7,16 @@ import { IoCalendarOutline } from "react-icons/io5";
 import { Tooltip } from "react-tooltip";
 import { v4 as uuidv4 } from "uuid";
 
+import { useTask } from "../../contexts/taskContext";
 import { Task } from "../../interface";
 import { checkTypeDueDate, transferPayloadDueDate } from "../../utils/Helpers";
+import { DATE_FORMAT } from "../../utils/variables";
 import DropdownSetDue from "../DropdownSetDue";
 import "./addNewTask.scss";
-import moment from "moment";
-import { DATE_FORMAT } from "../../utils/variables";
 
-interface AddNewTaskProps {
-  setDataTask: React.Dispatch<React.SetStateAction<Task[]>>;
-}
+const AddNewTask: React.FC = () => {
+  const { dispatch } = useTask();
 
-const AddNewTask: React.FC<AddNewTaskProps> = ({ setDataTask }) => {
   const [showDropdownDue, setShowDropdownDue] = useState<boolean>(false);
   const [inputTask, setInputTask] = useState<string>("");
   const [optionDue, setOptionDue] = useState<string>("");
@@ -35,7 +34,7 @@ const AddNewTask: React.FC<AddNewTaskProps> = ({ setDataTask }) => {
       due_date: optionDue !== "" ? transferPayloadDueDate(optionDue) : null,
       isCompleted: false,
     };
-    setDataTask((prevTask) => (prevTask ? [...prevTask, newTask] : [newTask]));
+    dispatch({ type: "ADD_TASK", payload: newTask });
     setInputTask("");
     setOptionDue("");
   };

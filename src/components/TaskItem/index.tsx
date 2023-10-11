@@ -8,23 +8,19 @@ import { Task } from "../../interface";
 import "./taskItem.scss";
 import moment from "moment";
 import { DATE_FORMAT } from "../../utils/variables";
+import { useTask } from "../../contexts/taskContext";
 
 interface TaskItemProps {
   task: Task;
-  tasksList?: Task[];
-  setDataTask: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
-const TaskItem: React.FC<TaskItemProps> = ({
-  task,
-  tasksList,
-  setDataTask,
-}) => {
-  const [important, setImportant] = useState<boolean>(false);
+const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
+  const { dispatch } = useTask();
+
   const [isDueDate, setIsDueDate] = useState<boolean>(true);
 
-  const checkImportantHandler = () => {
-    setImportant(!important);
+  const checkImportantHandler = (id: string) => {
+    dispatch({ type: "ADD_TO_IMPORTANT", payload: id });
   };
 
   const checkDueDateTask = () => {
@@ -44,14 +40,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
   }, [task]);
 
   const checkCompleteHandler = (id: string) => {
-    const updatedTasks = (tasksList ?? []).map((task) => {
-      if (task?.id === id) {
-        return { ...task, isCompleted: !task?.isCompleted };
-      }
-      return task;
-    });
-
-    setDataTask(updatedTasks);
+    dispatch({ type: "TOGGLE_COMPLETE", payload: id });
   };
 
   return (
@@ -92,14 +81,22 @@ const TaskItem: React.FC<TaskItemProps> = ({
         </div>
       </div>
       <div className="task__important-showDetails">
-        <div
-          data-tooltip-id="important-tooltip"
-          className="task__important--icon"
-          onClick={checkImportantHandler}
-        >
-          {important ? <HiStar /> : <HiOutlineStar />}
-        </div>
-        <Tooltip id="important-tooltip" place="top" content="Add new task" />
+        {!task?.isCompleted && (
+          <>
+            <div
+              data-tooltip-id="important-tooltip"
+              className="task__important--icon"
+              onClick={() => checkImportantHandler(task?.id)}
+            >
+              {task?.isImportant ? <HiStar /> : <HiOutlineStar />}
+            </div>
+            <Tooltip
+              id="important-tooltip"
+              place="top"
+              content="Add important task"
+            />
+          </>
+        )}
         <div className="task__showDetails--icon">
           <HiOutlineChevronRight />
         </div>

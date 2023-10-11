@@ -4,7 +4,51 @@
   padding: 0 18px;
 
   .myTasks__header {
-    font-size: 44px;
+    font-size: 24px;
     font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #444444;
+
+    &--icon {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .myTasks__today {
+    font-size: 14px;
+    margin-top: 4px;
+    color: #555;
+  }
+}
+
+.collapsed-icon {
+  transition: transform 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+}
+
+.expanded {
+  transform: rotate(180deg);
+}
+
+.collapsed {
+  transform: rotate(90deg);
+}
+
+.tasks__completed--wrapper {
+  animation: slideFadeDown 0.3s forwards;
+}
+
+@keyframes slideFadeDown {
+  0% {
+    transform: translate3d(0, -30%, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
   }
 }

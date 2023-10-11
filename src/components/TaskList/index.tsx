@@ -1,27 +1,21 @@
 import React from "react";
 
-import { Task } from "../../interface";
+import { useTask } from "../../contexts/taskContext";
 import TaskItem from "../TaskItem";
 import "./taskList.scss";
 
-interface TaskListProps {
-  tasksList?: Task[];
-  setDataTask: React.Dispatch<React.SetStateAction<Task[]>>;
-}
+const TaskList: React.FC = () => {
+  const { state } = useTask();
+  const dataTask = state?.tasks;
 
-const TaskList: React.FC<TaskListProps> = ({ tasksList, setDataTask }) => {
-  const taskInCompleted = tasksList?.filter((task) => !task?.isCompleted);
+  const taskInCompleted = dataTask?.filter((task) => !task?.isCompleted);
 
   return (
     <div className="task__list">
       {taskInCompleted?.map((task, index) => {
         return (
           <div key={index}>
-            <TaskItem
-              task={task}
-              tasksList={tasksList}
-              setDataTask={setDataTask}
-            />
+            <TaskItem task={task} />
           </div>
         );
       })}
