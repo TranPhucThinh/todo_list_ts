@@ -12,6 +12,8 @@
     color: #808080;
     cursor: pointer;
   }
+
+  // animation: slideFadeLeft 0.3s forwards;
 }
 
 .menu__left--open {
@@ -147,16 +149,27 @@
     }
   }
 
-  animation: slideFadeRight 0.3s forwards;
+  // animation: slideFadeRight 0.3s forwards;
 }
 
-@keyframes slideFadeRight {
-  0% {
-    transform: translate3d(-100%, 0, 0);
-    opacity: 0;
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
-  }
-}
+// @keyframes slideFadeRight {
+//   0% {
+//     transform: translate3d(-100%, 0, 0);
+//     opacity: 0;
+//   }
+//   100% {
+//     transform: translate3d(0, 0, 0);
+//     opacity: 1;
+//   }
+// }
+
+// @keyframes slideFadeLeft {
+//   100% {
+//     transform: translate3d(0, 0, 0);
+//     opacity: 1;
+//   }
+//   0% {
+//     transform: translate3d(-100%, 0, 0);
+//     opacity: 0;
+//   }
+// }

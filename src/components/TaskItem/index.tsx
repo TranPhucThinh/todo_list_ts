@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { HiStar, HiOutlineChevronRight, HiOutlineStar } from "react-icons/hi";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { GoCheckCircleFill, GoCircle } from "react-icons/go";
+import { HiOutlineChevronRight, HiOutlineStar, HiStar } from "react-icons/hi";
 import { IoCalendarOutline } from "react-icons/io5";
-import { GoCircle, GoCheckCircleFill } from "react-icons/go";
 import { Tooltip } from "react-tooltip";
 
-import { Task } from "../../interface";
-import "./taskItem.scss";
 import moment from "moment";
-import { DATE_FORMAT } from "../../utils/variables";
 import { useTask } from "../../contexts/taskContext";
+import { Task } from "../../interface";
+import { convertFullDateToDate } from "../../utils/Helpers";
+import { DATE_FORMAT } from "../../utils/variables";
+import "./taskItem.scss";
 
 interface TaskItemProps {
   task: Task;
@@ -20,6 +22,10 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
   const [isDueDate, setIsDueDate] = useState<boolean>(true);
 
   const checkImportantHandler = (id: string) => {
+    axios.put("http://localhost:3004/tasks/" + id, {
+      ...task,
+      isImportant: !task.isImportant,
+    });
     dispatch({ type: "ADD_TO_IMPORTANT", payload: id });
   };
 
@@ -40,14 +46,28 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
   }, [task]);
 
   const checkCompleteHandler = (id: string) => {
+    axios.put("http://localhost:3004/tasks/" + id, {
+      ...task,
+      isCompleted: !task.isCompleted,
+    });
     dispatch({ type: "TOGGLE_COMPLETE", payload: id });
   };
 
+  const openDetailsTaskHandler = () => {
+    dispatch({
+      type: "TOGGLE_DETAILS_TASK",
+      payload: { taskDetails: task, isOpenDetailsTask: true },
+    });
+  };
+
   return (
-    <div className="task">
+    <div className="task" onClick={openDetailsTaskHandler}>
       <div className="task__checkbox-title">
         <div
-          onClick={() => checkCompleteHandler(task?.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            checkCompleteHandler(task?.id);
+          }}
           style={{ color: "#2564cf" }}
           className="task__checkbox--complete"
         >
@@ -74,7 +94,9 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
                 <span
                   style={isDueDate ? {} : { color: "#a80000" }}
                   className="task__due-date--detail"
-                >{`${isDueDate ? "Due" : "Overdue"} ${task?.due_date}`}</span>
+                >{`${isDueDate ? "Due" : "Overdue"} ${convertFullDateToDate(
+                  task?.due_date,
+                )}`}</span>
               </>
             )}
           </div>

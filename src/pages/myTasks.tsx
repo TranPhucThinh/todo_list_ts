@@ -1,7 +1,8 @@
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiTask } from "react-icons/bi";
 import { BsChevronUp } from "react-icons/bs";
+import axios from "axios";
 
 import AddNewTask from "../components/AddNewTask";
 import TaskList from "../components/TaskList";
@@ -11,7 +12,7 @@ import "../styles/myTasksPage.scss";
 import { DATE_FORMAT } from "../utils/variables";
 
 const MyTasks: React.FC = () => {
-  const { state } = useTask();
+  const { state, dispatch } = useTask();
   const dataTask = state?.tasks;
 
   const [isOpenCollapse, setIsOpenCollapse] = useState<boolean>(false);
@@ -19,6 +20,18 @@ const MyTasks: React.FC = () => {
   const openCollapseHandler = () => {
     setIsOpenCollapse(!isOpenCollapse);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get("http://localhost:3004/tasks");
+
+      dispatch({ type: "GET_ALL_TASKS", payload: response?.data });
+    };
+
+    fetchData();
+
+    if (dataTask?.every((task) => task?.isCompleted)) setIsOpenCollapse(true);
+  }, []);
 
   return (
     <div className="myTasks__container">
@@ -72,7 +85,7 @@ const MyTasks: React.FC = () => {
                   display: "inline-block",
                 }}
               >
-                {dataTask?.map((task) => task?.isCompleted)?.length}
+                {dataTask?.filter((task) => task?.isCompleted)?.length}
               </span>
             </div>
             {isOpenCollapse && (

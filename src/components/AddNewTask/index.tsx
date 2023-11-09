@@ -1,3 +1,4 @@
+import axios from "axios";
 import moment from "moment";
 import React, { ChangeEvent, useState } from "react";
 import DatePicker from "react-datepicker";
@@ -7,34 +8,56 @@ import { IoCalendarOutline } from "react-icons/io5";
 import { Tooltip } from "react-tooltip";
 import { v4 as uuidv4 } from "uuid";
 
-import { useTask } from "../../contexts/taskContext";
 import { Task } from "../../interface";
 import { checkTypeDueDate, transferPayloadDueDate } from "../../utils/Helpers";
 import { DATE_FORMAT } from "../../utils/variables";
 import DropdownSetDue from "../DropdownSetDue";
 import "./addNewTask.scss";
+import { useTask } from "../../contexts/taskContext";
 
 const AddNewTask: React.FC = () => {
-  const { dispatch } = useTask();
-
   const [showDropdownDue, setShowDropdownDue] = useState<boolean>(false);
   const [inputTask, setInputTask] = useState<string>("");
   const [optionDue, setOptionDue] = useState<string>("");
   const [date, setDate] = useState<Date | null>(new Date());
   const [datePickerIsOpen, setDatePickerIsOpen] = useState<boolean>(false);
 
+  const { dispatch } = useTask();
+
   const showDropdownDueHandler = () => {
     setShowDropdownDue(!showDropdownDue);
   };
 
-  const onAddNewTaskHandler = () => {
+  const onAddNewTaskHandler = async () => {
     const newTask: Task = {
       id: uuidv4(),
       title: inputTask,
       due_date: optionDue !== "" ? transferPayloadDueDate(optionDue) : null,
       isCompleted: false,
     };
-    dispatch({ type: "ADD_TASK", payload: newTask });
+
+    try {
+      const { status, data } = await axios.post<Task>(
+        "http://localhost:3004/tasks",
+        newTask,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        },
+      );
+
+      if (status === 201) {
+        dispatch({ type: "ADD_TASK", payload: data });
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        const errorMessage = error.message;
+        return errorMessage;
+      }
+    }
+
     setInputTask("");
     setOptionDue("");
   };
@@ -112,8 +135,10 @@ const AddNewTask: React.FC = () => {
           <DropdownSetDue
             showDropdownDue={showDropdownDue}
             setShowDropdownDue={setShowDropdownDue}
+            optionDue={optionDue}
             setOptionDue={setOptionDue}
             openDatePicker={openDatePicker}
+            className="dropdown__container--left"
           />
         )}
         {!showDropdownDue && (

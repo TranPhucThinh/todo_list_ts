@@ -10,15 +10,19 @@ import "./dropdownSetDue.scss";
 interface DropdownProps {
   showDropdownDue: boolean;
   setShowDropdownDue: React.Dispatch<React.SetStateAction<boolean>>;
+  optionDue: string;
   setOptionDue: (_value: string) => void;
   openDatePicker: () => void;
+  className: string;
 }
 
 const DropdownSetDue: React.FC<DropdownProps> = ({
   showDropdownDue,
   setShowDropdownDue,
+  optionDue,
   setOptionDue,
   openDatePicker,
+  className,
 }) => {
   const closeDropdownDueHandler = () => {
     setShowDropdownDue(!showDropdownDue);
@@ -32,7 +36,7 @@ const DropdownSetDue: React.FC<DropdownProps> = ({
   return (
     <>
       <div className="overlay" onClick={closeDropdownDueHandler} />
-      <div className="dropdown__container">
+      <div className={`${className}`}>
         <div className="dropdown__header">Due</div>
         <div className="dropdown__content--options">
           <div
@@ -72,15 +76,17 @@ const DropdownSetDue: React.FC<DropdownProps> = ({
             <p className="logo-title__title">Pick a date</p>
           </div>
         </div>
-        <div
-          className="dropdown__content--remove-due"
-          onClick={() => selectOptionDueHandler("")}
-        >
-          <div className="remove-due__icon">
-            <RiDeleteBin6Line />
+        {optionDue && (
+          <div
+            className="dropdown__content--remove-due"
+            onClick={() => selectOptionDueHandler("")}
+          >
+            <div className="remove-due__icon">
+              <RiDeleteBin6Line />
+            </div>
+            <p className="remove-due__title">Remove due date</p>
           </div>
-          <p className="remove-due__title">Remove due date</p>
-        </div>
+        )}
       </div>
     </>
   );

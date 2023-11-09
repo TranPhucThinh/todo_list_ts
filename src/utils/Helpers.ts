@@ -27,3 +27,19 @@ export const transferPayloadDueDate = (type: string) => {
     return type;
   }
 };
+
+export const convertFullDateToDate = (date: string) => {
+  const today = moment().format(DATE_FORMAT.DAY_MONTH_FULL);
+  const tomorrow = moment().add(1, "days").format(DATE_FORMAT.DAY_MONTH_FULL);
+  const nextWeek = moment().add(6, "days").format(DATE_FORMAT.DAY_MONTH_FULL);
+
+  if (moment(date).isSame(today, "day")) {
+    return "Today";
+  } else if (moment(date).isSame(tomorrow, "day")) {
+    return "Tomorrow";
+  } else if (moment(date).isSame(nextWeek, "day")) {
+    return moment().add(6, "days").format(DATE_FORMAT.DAY_MONTH_FULL);
+  } else {
+    return date;
+  }
+};

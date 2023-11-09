@@ -6,9 +6,10 @@ import "./taskList.scss";
 
 const TaskList: React.FC = () => {
   const { state } = useTask();
-  const dataTask = state?.tasks;
 
-  const taskInCompleted = dataTask?.filter((task) => !task?.isCompleted);
+  const dataTasks = state.tasks;
+
+  const taskInCompleted = dataTasks?.filter((task) => !task?.isCompleted);
 
   return (
     <div className="task__list">
