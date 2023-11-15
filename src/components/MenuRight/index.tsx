@@ -14,9 +14,9 @@ import { Tooltip } from "react-tooltip";
 
 import { useTask } from "../../contexts/taskContext";
 import {
-  checkTypeDueDate,
   convertPayloadDueDate,
   convertTextToDate,
+  renderTextDueDate,
 } from "../../utils/Helpers";
 import { DATE_FORMAT } from "../../utils/variables";
 import DropdownSetDue from "../DropdownSetDue";
@@ -46,10 +46,12 @@ const MenuRight: React.FC<MenuRightProps> = ({ notifyUpdate }) => {
   // check due task
   const checkDueDateTask = () => {
     if (optionDue) {
-      const convertDueDate = convertTextToDate(optionDue);
-      const today = moment();
-      const dueDate = moment(convertDueDate);
-      if (dueDate.isSameOrAfter(today, "day")) {
+      const today = moment().format(DATE_FORMAT.DAY_MONTH_FULL);
+      const due = moment(convertTextToDate(optionDue));
+
+      const todayDate = moment(today).startOf("day");
+      const dueDate = moment(due).startOf("day");
+      if (dueDate.isSameOrAfter(todayDate, "day")) {
         setIsDueDate(true);
       } else {
         setIsDueDate(false);
@@ -125,8 +127,6 @@ const MenuRight: React.FC<MenuRightProps> = ({ notifyUpdate }) => {
     await fetchData();
 
     notifyUpdate();
-
-    setOptionDue("");
   };
 
   const fetchData = async () => {
@@ -233,7 +233,7 @@ const MenuRight: React.FC<MenuRightProps> = ({ notifyUpdate }) => {
               style={isDueDate ? {} : { color: "#a80000" }}
               className="due-date"
             >
-              Due {checkTypeDueDate(optionDue)}
+              Due {renderTextDueDate(optionDue)}
             </p>
           ) : (
             <p className="no__due-date">Add due date</p>

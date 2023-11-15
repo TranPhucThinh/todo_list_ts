@@ -28,18 +28,6 @@ export const convertPayloadDueDate = (type: string | undefined | null) => {
   }
 };
 
-export const convertTextToDate = (type: string | undefined | null) => {
-  if (type === typesDueDate.TODAY) {
-    return moment();
-  } else if (type === typesDueDate.TOMORROW) {
-    return moment().add(1, "days");
-  } else if (type === typesDueDate.NEXT_WEEK) {
-    return moment().add(6, "days");
-  } else {
-    return type;
-  }
-};
-
 export const convertFullDateToDate = (date: string | undefined | null) => {
   const today = moment().format(DATE_FORMAT.DAY_MONTH_FULL);
   const tomorrow = moment().add(1, "days").format(DATE_FORMAT.DAY_MONTH_FULL);
@@ -53,5 +41,29 @@ export const convertFullDateToDate = (date: string | undefined | null) => {
     return moment().add(6, "days").format(DATE_FORMAT.DAY_MONTH_FULL);
   } else {
     return date;
+  }
+};
+
+export const convertTextToDate = (type: string | undefined | null) => {
+  if (type === typesDueDate.TODAY) {
+    return moment().format(DATE_FORMAT.DAY_MONTH_FULL);
+  } else if (type === typesDueDate.TOMORROW) {
+    return moment().add(1, "days").format(DATE_FORMAT.DAY_MONTH_FULL);
+  } else if (type === typesDueDate.NEXT_WEEK) {
+    return moment().add(6, "days").format(DATE_FORMAT.DAY_MONTH_FULL);
+  } else {
+    return type;
+  }
+};
+
+export const renderTextDueDate = (date: string | undefined | null) => {
+  if (
+    date === typesDueDate.TODAY ||
+    date === typesDueDate.NEXT_WEEK ||
+    date === typesDueDate.TOMORROW
+  ) {
+    return checkTypeDueDate(date);
+  } else {
+    return convertFullDateToDate(date);
   }
 };
