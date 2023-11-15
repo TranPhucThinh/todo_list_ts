@@ -6,10 +6,10 @@ import { useTask } from "../../contexts/taskContext";
 import "./modalConfirm.scss";
 
 interface ModalConfirmProps {
-  notify: () => void;
+  notifyDelete: () => void;
 }
 
-const ModalConfirm: React.FC<ModalConfirmProps> = ({ notify }) => {
+const ModalConfirm: React.FC<ModalConfirmProps> = ({ notifyDelete }) => {
   const { dispatch, state } = useTask();
 
   const taskDetails = state?.taskDetails;
@@ -29,7 +29,7 @@ const ModalConfirm: React.FC<ModalConfirmProps> = ({ notify }) => {
         isOpenDetailsTask: false,
       },
     });
-    notify();
+    notifyDelete();
   };
 
   return (

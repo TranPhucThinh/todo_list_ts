@@ -8,12 +8,12 @@ import { IoCalendarOutline } from "react-icons/io5";
 import { Tooltip } from "react-tooltip";
 import { v4 as uuidv4 } from "uuid";
 
+import { useTask } from "../../contexts/taskContext";
 import { Task } from "../../interface";
-import { checkTypeDueDate, transferPayloadDueDate } from "../../utils/Helpers";
+import { checkTypeDueDate, convertPayloadDueDate } from "../../utils/Helpers";
 import { DATE_FORMAT } from "../../utils/variables";
 import DropdownSetDue from "../DropdownSetDue";
 import "./addNewTask.scss";
-import { useTask } from "../../contexts/taskContext";
 
 const AddNewTask: React.FC = () => {
   const [showDropdownDue, setShowDropdownDue] = useState<boolean>(false);
@@ -24,15 +24,12 @@ const AddNewTask: React.FC = () => {
 
   const { dispatch } = useTask();
 
-  const showDropdownDueHandler = () => {
-    setShowDropdownDue(!showDropdownDue);
-  };
-
+  // Add new task
   const onAddNewTaskHandler = async () => {
     const newTask: Task = {
       id: uuidv4(),
       title: inputTask,
-      due_date: optionDue !== "" ? transferPayloadDueDate(optionDue) : null,
+      due_date: optionDue !== "" ? convertPayloadDueDate(optionDue) : null,
       isCompleted: false,
     };
 
@@ -66,6 +63,12 @@ const AddNewTask: React.FC = () => {
     setInputTask(e.target.value);
   };
 
+  // Toggle dropdown set due date
+  const showDropdownDueHandler = () => {
+    setShowDropdownDue(!showDropdownDue);
+  };
+
+  // Toggle date picker
   const openDatePicker = () => {
     setDatePickerIsOpen(!datePickerIsOpen);
     setShowDropdownDue(false);
@@ -79,6 +82,7 @@ const AddNewTask: React.FC = () => {
 
   return (
     <div className="add__new--container">
+      {/* Start input task */}
       <div className="add__new">
         <div
           data-tooltip-id="add_new-tooltip"
@@ -89,7 +93,9 @@ const AddNewTask: React.FC = () => {
         >
           <HiPlus />
         </div>
+
         <Tooltip id="add_new-tooltip" place="top" content="Add new task" />
+
         <input
           type="text"
           placeholder="Add New Task"
@@ -99,6 +105,8 @@ const AddNewTask: React.FC = () => {
           onKeyDown={onKeyDownHandler}
         />
       </div>
+
+      {/* Start set due date */}
       <div className="set__due">
         <div style={{ display: "flex" }}>
           <div
@@ -115,6 +123,8 @@ const AddNewTask: React.FC = () => {
             )}
           </div>
         </div>
+
+        {/* Start date picker */}
         <DatePicker
           onClickOutside={openDatePicker}
           open={datePickerIsOpen}
@@ -131,6 +141,8 @@ const AddNewTask: React.FC = () => {
             </button>
           </div>
         </DatePicker>
+
+        {/* Start dropdown to set due date */}
         {showDropdownDue && (
           <DropdownSetDue
             showDropdownDue={showDropdownDue}

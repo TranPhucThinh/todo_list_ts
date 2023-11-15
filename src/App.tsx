@@ -22,9 +22,22 @@ import StickyWall from "./pages/stickyWall";
 const App: React.FC = () => {
   const { state } = useTask();
 
-  const notify = () => {
+  const notifyDelete = () => {
     toast.success("Deleted successfully !", {
-      position: "top-right",
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
+  const notifyUpdate = () => {
+    toast.success("Update task successfully !", {
+      position: "top-center",
       autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -63,10 +76,12 @@ const App: React.FC = () => {
                 pauseOnHover
                 theme="light"
               />
-              {state.isOpenModalDelete && <ModalConfirm notify={notify} />}
+              {state.isOpenModalDelete && (
+                <ModalConfirm notifyDelete={notifyDelete} />
+              )}
               <MenuLeft />
               <Outlet />
-              <MenuRight />
+              <MenuRight notifyUpdate={notifyUpdate} />
             </div>
           }
         >

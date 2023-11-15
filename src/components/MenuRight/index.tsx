@@ -1,6 +1,7 @@
 import axios from "axios";
 import moment from "moment";
 import React, { ChangeEvent, useEffect, useState } from "react";
+import DatePicker from "react-datepicker";
 import {
   GoCheckCircleFill,
   GoCircle,
@@ -10,22 +11,29 @@ import {
 import { HiOutlineStar, HiPlus, HiStar } from "react-icons/hi";
 import { IoCalendarOutline } from "react-icons/io5";
 import { Tooltip } from "react-tooltip";
-import DatePicker from "react-datepicker";
 
 import { useTask } from "../../contexts/taskContext";
+import {
+  checkTypeDueDate,
+  convertPayloadDueDate,
+  convertTextToDate,
+} from "../../utils/Helpers";
 import { DATE_FORMAT } from "../../utils/variables";
 import DropdownSetDue from "../DropdownSetDue";
 import "./menuRight.scss";
-import { checkTypeDueDate, transferPayloadDueDate } from "../../utils/Helpers";
 
-const MenuRight: React.FC = () => {
+interface MenuRightProps {
+  notifyUpdate: () => void;
+}
+
+const MenuRight: React.FC<MenuRightProps> = ({ notifyUpdate }) => {
   const { dispatch, state } = useTask();
 
   const [inputStep, setInputStep] = useState<string>("");
   const [showDropdownDue, setShowDropdownDue] = useState<boolean>(false);
   const [isDueDate, setIsDueDate] = useState<boolean>(true);
   const [datePickerIsOpen, setDatePickerIsOpen] = useState<boolean>(false);
-  const [optionDue, setOptionDue] = useState<string>("");
+  const [optionDue, setOptionDue] = useState<string | null | undefined>("");
   const [date, setDate] = useState<Date | null>(new Date());
   const [inputTask, setInputTask] = useState<string | undefined>("");
 
@@ -35,14 +43,12 @@ const MenuRight: React.FC = () => {
     (task) => task?.id === taskDetails?.id,
   );
 
-  const editTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputTask(e.target.value);
-  };
-
+  // check due task
   const checkDueDateTask = () => {
-    if (selectedTask?.due_date) {
-      const today = moment().format(DATE_FORMAT.DAY_MONTH_FULL);
-      const dueDate = moment(selectedTask?.due_date);
+    if (optionDue) {
+      const convertDueDate = convertTextToDate(optionDue);
+      const today = moment();
+      const dueDate = moment(convertDueDate);
       if (dueDate.isSameOrAfter(today, "day")) {
         setIsDueDate(true);
       } else {
@@ -51,32 +57,9 @@ const MenuRight: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    checkDueDateTask();
-    setInputTask(selectedTask?.title);
-  }, [selectedTask]);
-
-  const fetchData = async () => {
-    const response = await axios.get("http://localhost:3004/tasks");
-
-    dispatch({ type: "GET_ALL_TASKS", payload: response?.data });
+  const editTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputTask(e.target.value);
   };
-
-  useEffect(() => {
-    if (optionDue) {
-      axios.put("http://localhost:3004/tasks/" + selectedTask?.id, {
-        ...selectedTask,
-        due_date: transferPayloadDueDate(optionDue),
-      });
-
-      dispatch({
-        type: "UPDATE_DETAILS_TASK",
-        payload: { ...taskDetails, due_date: optionDue },
-      });
-
-      fetchData();
-    }
-  }, [optionDue]);
 
   const onAddNewTaskStepHandler = () => {};
 
@@ -132,14 +115,37 @@ const MenuRight: React.FC = () => {
     });
   };
 
-  const submitEditTaskHandler = () => {
-    console.log("date:", date);
+  const submitEditTaskHandler = async () => {
+    await axios.put("http://localhost:3004/tasks/" + selectedTask?.id, {
+      ...selectedTask,
+      title: inputTask,
+      due_date: convertPayloadDueDate(optionDue),
+    });
 
-    // axios.put("http://localhost:3004/tasks/" + selectedTask?.id, {
-    //   ...selectedTask,
-    //   title: inputTask,
-    // });
+    await fetchData();
+
+    notifyUpdate();
+
+    setOptionDue("");
   };
+
+  const fetchData = async () => {
+    const response = await axios.get("http://localhost:3004/tasks");
+
+    dispatch({ type: "GET_ALL_TASKS", payload: response?.data });
+  };
+
+  useEffect(() => {
+    setOptionDue(selectedTask?.due_date);
+  }, [selectedTask?.id]);
+
+  useEffect(() => {
+    checkDueDateTask();
+  }, [optionDue, selectedTask?.due_date]);
+
+  useEffect(() => {
+    setInputTask(selectedTask?.title);
+  }, [selectedTask]);
 
   return (
     <div
@@ -227,7 +233,7 @@ const MenuRight: React.FC = () => {
               style={isDueDate ? {} : { color: "#a80000" }}
               className="due-date"
             >
-              Due {checkTypeDueDate(taskDetails?.due_date)}
+              Due {checkTypeDueDate(optionDue)}
             </p>
           ) : (
             <p className="no__due-date">Add due date</p>
