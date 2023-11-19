@@ -1,0 +1,51 @@
+.step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+
+  .step__checkbox-title {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      color: #2564cf;
+      margin-left: 2px;
+      font-size: 14px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .title {
+      color: #605e5c;
+      font-size: 14px;
+      border: none;
+      outline: none;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  .icon__remove {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    opacity: 0.6;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .btn__add-step {
+    font-size: 12px;
+    font-weight: 700;
+  }
+}

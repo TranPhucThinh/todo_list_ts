@@ -37,7 +37,7 @@
             cursor: pointer;
             display: flex;
             align-items: center;
-            font-size: 16px;
+            font-size: 18px;
           }
 
           .task__title {
@@ -46,6 +46,7 @@
               border: none;
               font-size: 16px;
               color: #595858;
+              font-weight: 700;
             }
           }
         }
@@ -66,6 +67,7 @@
         display: flex;
         margin-top: 16px;
         background-color: #fff;
+        gap: 12px;
 
         &--icon {
           display: flex;
@@ -74,7 +76,7 @@
           font-weight: 500;
           opacity: 0.8;
           font-size: 18px;
-          color: #595858;
+          color: #2564cf;
 
           &:hover {
             cursor: pointer;
@@ -96,11 +98,16 @@
 
           &:focus {
             outline: none;
+
+            &::placeholder {
+              font-size: 16px;
+              color: #595858;
+            }
           }
 
           &::placeholder {
-            opacity: 0.8;
             font-size: 16px;
+            color: #2564cf;
           }
         }
       }
@@ -214,6 +221,14 @@
       &:hover {
         cursor: pointer;
         background-color: rgb(25, 84, 185);
+      }
+
+      &.disabled__save-btn {
+        background-color: #ccc;
+
+        &:hover {
+          cursor: not-allowed;
+        }
       }
     }
   }

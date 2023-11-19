@@ -7,21 +7,17 @@
       "isCompleted": true
     },
     {
-      "id": "61f20e72-83a3-4f19-a9a4-401222b275d4",
-      "title": "ok555",
-      "due_date": null,
-      "isCompleted": false
-    },
-    {
       "id": "ce4c2114-e8e3-49aa-9daa-fa2ffc1f31f5",
       "title": "ok3",
-      "due_date": "Wed, November 15",
-      "isCompleted": false
+      "due_date": "Fri, November 17",
+      "isCompleted": false,
+      "isImportant": false,
+      "steps": []
     },
     {
       "id": "e8728a09-11c1-4a4f-8262-54cb22e418c7",
       "title": "ok4",
-      "due_date": "Sun, November 12",
+      "due_date": "Thu, November 16",
       "isCompleted": false
     }
   ]

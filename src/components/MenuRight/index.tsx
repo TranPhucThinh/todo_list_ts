@@ -11,8 +11,10 @@ import {
 import { HiOutlineStar, HiPlus, HiStar } from "react-icons/hi";
 import { IoCalendarOutline } from "react-icons/io5";
 import { Tooltip } from "react-tooltip";
+import { v4 as uuidv4 } from "uuid";
 
 import { useTask } from "../../contexts/taskContext";
+import { Step } from "../../interface";
 import {
   convertPayloadDueDate,
   convertTextToDate,
@@ -20,6 +22,7 @@ import {
 } from "../../utils/Helpers";
 import { DATE_FORMAT } from "../../utils/variables";
 import DropdownSetDue from "../DropdownSetDue";
+import StepItem from "../Step";
 import "./menuRight.scss";
 
 interface MenuRightProps {
@@ -30,12 +33,14 @@ const MenuRight: React.FC<MenuRightProps> = ({ notifyUpdate }) => {
   const { dispatch, state } = useTask();
 
   const [inputStep, setInputStep] = useState<string>("");
+  const [steps, setSteps] = useState<Step[] | null | undefined>([]);
   const [showDropdownDue, setShowDropdownDue] = useState<boolean>(false);
-  const [isDueDate, setIsDueDate] = useState<boolean>(true);
+  const [isDueDate, setIsDueDate] = useState<boolean>(false);
   const [datePickerIsOpen, setDatePickerIsOpen] = useState<boolean>(false);
   const [optionDue, setOptionDue] = useState<string | null | undefined>("");
   const [date, setDate] = useState<Date | null>(new Date());
   const [inputTask, setInputTask] = useState<string | undefined>("");
+  const [disabledBtn, setDisableBtn] = useState<boolean>(true);
 
   const isOpenMenuRight = state?.isOpenDetailsTask;
   const taskDetails = state?.taskDetails;
@@ -52,9 +57,9 @@ const MenuRight: React.FC<MenuRightProps> = ({ notifyUpdate }) => {
       const todayDate = moment(today).startOf("day");
       const dueDate = moment(due).startOf("day");
       if (dueDate.isSameOrAfter(todayDate, "day")) {
-        setIsDueDate(true);
-      } else {
         setIsDueDate(false);
+      } else {
+        setIsDueDate(true);
       }
     }
   };
@@ -62,8 +67,6 @@ const MenuRight: React.FC<MenuRightProps> = ({ notifyUpdate }) => {
   const editTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setInputTask(e.target.value);
   };
-
-  const onAddNewTaskStepHandler = () => {};
 
   const checkCompleteHandler = (id: string) => {
     axios.put("http://localhost:3004/tasks/" + id, {
@@ -87,8 +90,60 @@ const MenuRight: React.FC<MenuRightProps> = ({ notifyUpdate }) => {
 
   const onKeyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      onAddNewTaskStepHandler();
+      addNewTaskStepHandler();
+      setDisableBtn(false);
     }
+  };
+
+  const addNewTaskStepHandler = () => {
+    setSteps((prevSteps) => {
+      const newStep = { id: uuidv4(), title: inputStep, isCompleted: false };
+
+      if (prevSteps === null || prevSteps === undefined) {
+        return [newStep];
+      }
+
+      return [...prevSteps, newStep];
+    });
+
+    setInputStep("");
+  };
+
+  const saveEditStep = (id: string, value: string) => {
+    setSteps(
+      (prevSteps) =>
+        prevSteps?.map((step: Step) => {
+          if (step.id === id) {
+            return {
+              ...step,
+              title: value,
+            };
+          }
+
+          return step;
+        }),
+    );
+  };
+
+  const toggleCompleteStep = (id: string) => {
+    setSteps(
+      (prevSteps) =>
+        prevSteps?.map((step: Step) => {
+          if (step.id === id) {
+            return { ...step, isCompleted: !step.isCompleted };
+          }
+
+          return step;
+        }),
+    );
+  };
+
+  const removeStep = (id: string) => {
+    setSteps((prevSteps) => prevSteps?.filter((step: Step) => step.id !== id));
+  };
+
+  const disabledSaveBtn = (value: boolean) => {
+    setDisableBtn(value);
   };
 
   const showDropdownDueHandler = () => {
@@ -108,6 +163,7 @@ const MenuRight: React.FC<MenuRightProps> = ({ notifyUpdate }) => {
         isOpenDetailsTask: false,
       },
     });
+    setDisableBtn(true);
   };
 
   const onDeleteTaskHandler = () => {
@@ -122,11 +178,14 @@ const MenuRight: React.FC<MenuRightProps> = ({ notifyUpdate }) => {
       ...selectedTask,
       title: inputTask,
       due_date: convertPayloadDueDate(optionDue),
+      steps: steps,
     });
 
     await fetchData();
 
     notifyUpdate();
+
+    setDisableBtn(true);
   };
 
   const fetchData = async () => {
@@ -137,6 +196,7 @@ const MenuRight: React.FC<MenuRightProps> = ({ notifyUpdate }) => {
 
   useEffect(() => {
     setOptionDue(selectedTask?.due_date);
+    setSteps(taskDetails?.steps);
   }, [selectedTask?.id]);
 
   useEffect(() => {
@@ -200,13 +260,23 @@ const MenuRight: React.FC<MenuRightProps> = ({ notifyUpdate }) => {
               </div>
             )}
           </div>
+          {steps?.map((step) => (
+            <StepItem
+              key={step.id}
+              step={step}
+              saveEditStep={saveEditStep}
+              toggleCompleteStep={toggleCompleteStep}
+              removeStep={removeStep}
+              disabledSaveBtn={disabledSaveBtn}
+            />
+          ))}
           <div className="add__step">
             <div
               data-tooltip-id="add__step-tooltip"
               className={`add__step--icon ${
                 inputStep !== "" ? "" : "disabled__btn"
               }`}
-              onClick={onAddNewTaskStepHandler}
+              onClick={addNewTaskStepHandler}
             >
               <HiPlus />
             </div>
@@ -222,15 +292,19 @@ const MenuRight: React.FC<MenuRightProps> = ({ notifyUpdate }) => {
           </div>
         </div>
         <div className="menu__right--add-due" onClick={showDropdownDueHandler}>
-          <div
-            style={isDueDate ? {} : { color: "#a80000" }}
-            className="set__due--icon"
-          >
+          {taskDetails?.due_date ? (
+            <div
+              style={isDueDate ? { color: "#a80000" } : {}}
+              className="set__due--icon"
+            >
+              <IoCalendarOutline />
+            </div>
+          ) : (
             <IoCalendarOutline />
-          </div>
+          )}
           {taskDetails?.due_date ? (
             <p
-              style={isDueDate ? {} : { color: "#a80000" }}
+              style={isDueDate ? { color: "#a80000" } : {}}
               className="due-date"
             >
               Due {renderTextDueDate(optionDue)}
@@ -266,7 +340,13 @@ const MenuRight: React.FC<MenuRightProps> = ({ notifyUpdate }) => {
           />
         )}
 
-        <button onClick={submitEditTaskHandler} className="detail__task--btn">
+        <button
+          onClick={submitEditTaskHandler}
+          className={`${
+            disabledBtn ? "disabled__save-btn" : ""
+          } detail__task--btn`}
+          disabled={disabledBtn}
+        >
           Save
         </button>
       </div>

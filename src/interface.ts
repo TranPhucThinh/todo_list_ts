@@ -4,4 +4,11 @@ export interface Task {
   due_date?: string | null;
   isImportant?: boolean;
   isCompleted: boolean;
+  steps?: Step[] | null | undefined;
+}
+
+export interface Step {
+  id: string;
+  title: string;
+  isCompleted: boolean;
 }
