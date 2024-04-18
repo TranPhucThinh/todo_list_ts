@@ -17,7 +17,6 @@ import Important from "./pages/important";
 import Login from "./pages/login";
 import MyTasks from "./pages/myTasks";
 import Register from "./pages/register";
-import StickyWall from "./pages/stickyWall";
 
 const App: React.FC = () => {
   const { state } = useTask();
@@ -48,7 +47,7 @@ const App: React.FC = () => {
     });
   };
 
-  const isAuthenticated = false;
+  const isAuthenticated = true;
 
   return (
     <BrowserRouter>
@@ -87,7 +86,6 @@ const App: React.FC = () => {
         >
           <Route path="/my-tasks" element={<MyTasks />} />
           <Route path="/important" element={<Important />} />
-          <Route path="/sticky-wall" element={<StickyWall />} />
         </Route>
       </Routes>
     </BrowserRouter>

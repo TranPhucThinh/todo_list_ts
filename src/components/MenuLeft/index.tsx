@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { HiMenu, HiOutlineSearch, HiOutlineStar } from "react-icons/hi";
 import { LuListTodo, LuSettings, LuLogOut } from "react-icons/lu";
-import { FaRegStickyNote } from "react-icons/fa";
+// import { FaRegStickyNote } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 
 import "./menuLeft.scss";
@@ -67,7 +67,7 @@ const MenuLeft: React.FC = () => {
                     Important
                   </p>
                 </NavLink>
-                <NavLink
+                {/* <NavLink
                   to="/sticky-wall"
                   style={{ textDecoration: "none", color: "#7c7c7c" }}
                   className={({ isActive }) =>
@@ -82,7 +82,7 @@ const MenuLeft: React.FC = () => {
                   <p className="option__title sticky__wall--title">
                     Sticky Wall
                   </p>
-                </NavLink>
+                </NavLink> */}
               </div>
             </div>
           </div>
